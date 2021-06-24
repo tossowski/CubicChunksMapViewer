@@ -1650,7 +1650,7 @@ class RegionSet(object):
                 z = int(p[2])
                 if abs(x) > 500000 or abs(y) > 500000:
                     logging.warning("Holy shit what is up with region file %s !?" % f)
-                if abs(x) > 100:
+                if abs(x) < 100:
                     yield (x, y, z, os.path.join(self.regiondir, f))
 
 
