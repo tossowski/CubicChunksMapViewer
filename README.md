@@ -1,3 +1,8 @@
+### Bug fixing TODOs:
+* Random patches of non-smooth light areas when using smooth lighting
+* --check-tiles mode doesn't work, must use --force-render to render entire desired section
+* Make cropping easier for rendering sections millions of blocks away from origin
+
 
 ### Minecraft (Cubic Chunks) Overviewer 
 
