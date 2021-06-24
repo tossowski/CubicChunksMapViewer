@@ -1210,8 +1210,7 @@ class TileSet(object):
                 tile_mtime = 0
 
             try:
-                dir = self.options.get("northdirection", 0)
-                max_chunk_mtime = max(c[5] for c in self.get_chunks_by_tile(self, tileobj, self.regionset))
+                max_chunk_mtime = max(c[5] for c in self.get_chunks_by_tile(tileobj, self.regionset))
             except ValueError:
                 # max got an empty sequence! something went horribly wrong
                 logging.warning("tile %s expected contains no chunks! this may be a bug", path)

@@ -296,10 +296,8 @@ class MCRFileReader(object):
         try:
             location = self._locations[int(x * 256 + y * 16 + z)]
         except:
-            print("shit")
             return None
         
-        #location = self._locations[int(x * 256 + y * 16 + z)]
         offset = (location >> 8) * 512
         sectors = location & 0xff
 
@@ -329,10 +327,6 @@ class MCRFileReader(object):
         data = BytesIO(data)
 
         try:
-            # _, d = NBTFileReader(data, is_gzip=is_gzip).read_all()
-            # if d['Level']['y'] not in [0,4,8,12]:
-            #     print(d['Level']['y'])
-
             return NBTFileReader(data, is_gzip=is_gzip).read_all()
         except CorruptionError:
             raise
