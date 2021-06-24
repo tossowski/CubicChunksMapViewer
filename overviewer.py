@@ -527,6 +527,10 @@ def main():
         # tranformations will pull from this cache, but their results will not
         # be cached by this layer. This uses a common pool of caches; each
         # regionset cache pulls from the same underlying cache object.
+
+        
+            # print(region_xmin, region_zmin, region_xmax, region_zmax)
+
         rset = world.CachedRegionSet(rset, caches)
 
         # If a crop is requested, wrap the regionset here
@@ -534,6 +538,9 @@ def main():
             rsets = []
             for zone in render['crop']:
                 rsets.append(world.CroppedRegionSet(rset, *zone))
+        elif "BTEcrop" in render:
+            rsets = []
+            rsets.append(world.BTECroppedRegionSet(rset, *render['BTEcrop']))
         else:
             rsets = [rset]
 

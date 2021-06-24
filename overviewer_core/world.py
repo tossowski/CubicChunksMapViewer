@@ -257,7 +257,7 @@ class RegionSet(object):
 
     """
 
-    def __init__(self, regiondir, rel):
+    def __init__(self, regiondir, rel, regionfiles={}):
         """Initialize a new RegionSet to access the region files in the given
         directory.
 
@@ -273,6 +273,9 @@ class RegionSet(object):
         self.regiondir = os.path.normpath(regiondir)
         self.rel = os.path.normpath(rel)
 
+        # This is populated below. It is a mapping from (x,y,z) region coords to filename
+        self.regionfiles = regionfiles
+
         # Helps keep track of which y levels need to be rendered
         # in each render tile. In CC worlds, as region y increases,
         # the chunks bleed into other render tiles.
@@ -281,8 +284,6 @@ class RegionSet(object):
         logging.debug("rel is %r" % self.rel)
 
         # we want to get rid of /regions, if it exists
-        # print(self.rel)
-        # print(os.path.normpath("/region2d"))
         if self.rel.endswith(os.path.normpath("/region3d")):
             self.type = self.rel[0:-len(os.path.normpath("/region3d"))]
         elif self.rel == "region3d":
@@ -294,26 +295,24 @@ class RegionSet(object):
 
         logging.debug("Scanning regions.  Type is %r" % self.type)
 
-        # This is populated below. It is a mapping from (x,y) region coords to filename
-        self.regionfiles = {}
-        raw_region_files = {}
 
         # This holds a cache of open regionfile objects
         self.regioncache = cache.LRUCache(size=16, destructor=lambda regionobj: regionobj.close())
 
-        min_region_y = float("inf")
-        for x, y, z,  regionfile in self._iterate_regionfiles():
-            # regionfile is a pathname
-            if os.path.getsize(regionfile) != 0:
-                raw_region_files[(x,y,z)] = (regionfile, os.path.getmtime(regionfile))
-                min_region_y = min(min_region_y, y)
-            else:
-                logging.debug("Skipping zero-size region file {}".format(regionfile))
+        if len(self.regionfiles) == 0:
 
-        # Modify region file dict keys so the lowest y region file has y = 0
-        for x, y, z in raw_region_files.keys():
-            val = raw_region_files[(x,y,z)]
-            self.regionfiles[(x,y-min_region_y,z)] = val
+            min_region_y = float("inf")
+            for x, y, z,  regionfile in self._iterate_regionfiles():
+                # regionfile is a pathname
+                if os.path.getsize(regionfile) != 0:
+                    self.regionfiles[(x,y,z)] = (regionfile, os.path.getmtime(regionfile))
+                    min_region_y = min(min_region_y, y)
+                else:
+                    logging.debug("Skipping zero-size region file {}".format(regionfile))
+
+            # Modify region file dict keys so the lowest y region file has y = 0
+            shifted_regions = {(k[0], k[1] - min_region_y, k[2]):v for k, v in self.regionfiles.items()}
+            self.regionfiles = shifted_regions
 
 
         self.empty_chunk = [None,None]
@@ -896,7 +895,7 @@ class RegionSet(object):
 
     # Re-initialize upon unpickling
     def __getstate__(self):
-        return (self.regiondir, self.rel)
+        return (self.regiondir, self.rel, self.regionfiles)
     def __setstate__(self, state):
         return self.__init__(*state)
 
@@ -1571,7 +1570,6 @@ class RegionSet(object):
         is not returned here.
 
         """
-
         for (regionx, regiony, regionz), (regionfile, filemtime) in self.regionfiles.items():
             try:
                 mcr = self._get_regionobj(regionfile)
@@ -1635,6 +1633,13 @@ class RegionSet(object):
         (regionfile,filemtime) = self.regionfiles.get((chunkX//16, chunkY//16, chunkZ//16),(None, None))
         return regionfile
 
+    def _filter_regionfiles(self, xmin, zmin, xmax, zmax):
+        shifted_regions = {}    
+        for (x, y, z), val in self.regionfiles.items():
+            if xmin <= x <= xmax and zmin <= z <= zmax:
+                shifted_regions[(x - xmin, y, z - zmin)] = val
+        self.regionfiles = shifted_regions
+
     def _iterate_regionfiles(self):
         """Returns an iterator of all of the region files, along with their
         coordinates
@@ -1650,7 +1655,7 @@ class RegionSet(object):
                 z = int(p[2])
                 if abs(x) > 500000 or abs(y) > 500000:
                     logging.warning("Holy shit what is up with region file %s !?" % f)
-                if abs(x) < 100:
+                else:
                     yield (x, y, z, os.path.join(self.regiondir, f))
 
 
@@ -1670,6 +1675,7 @@ class RegionSetWrapper(object):
     def __init__(self, rsetobj):
         self._r = rsetobj
         self.tile_level_map = rsetobj.tile_level_map
+
 
     @property
     def regiondir(self):
@@ -1740,9 +1746,8 @@ class RotatedRegionSet(RegionSetWrapper):
         self.north_dir = north_dir
         self.unrotate = self._unrotation_funcs[north_dir]
         self.rotate = self._rotation_funcs[north_dir]
-
         super(RotatedRegionSet, self).__init__(rsetobj)
-
+        #print(self._r._r._r.regionfiles)
 
     # Re-initialize upon unpickling. This is needed because we store a couple
     # lambda functions as instance variables
@@ -1807,6 +1812,7 @@ class CroppedRegionSet(RegionSetWrapper):
         self.zmin = zmin//16
         self.zmax = zmax//16
 
+
     def get_chunk(self,x,y,z):
         if (
                 self.xmin <= x <= self.xmax and
@@ -1838,6 +1844,27 @@ class CroppedRegionSet(RegionSetWrapper):
             return super(CroppedRegionSet, self).get_chunk_mtime(x,y,z)
         else:
             return None
+
+class BTECroppedRegionSet(CroppedRegionSet):
+    def __init__(self, rsetobj, xmin, zmin, xmax, zmax):
+        region_xmin = xmin//256
+        region_xmax = xmax//256
+        region_zmin = zmin//256
+        region_zmax = zmax//256
+
+        # Center the cropped region so that it is reasonably centered
+        xmin -= 256 * region_xmin
+        xmax -= 256 * region_xmin
+        zmax -= 256 * region_zmin
+        zmin -= 256 * region_zmin
+
+        obj = rsetobj
+        while isinstance(obj, RegionSetWrapper):
+            obj = obj._r
+
+        obj._filter_regionfiles(region_xmin, region_zmin, region_xmax, region_zmax)
+
+        super(BTECroppedRegionSet, self).__init__(obj, xmin, zmin, xmax, zmax)
 
 class CachedRegionSet(RegionSetWrapper):
     """A regionset wrapper that implements caching of the results from

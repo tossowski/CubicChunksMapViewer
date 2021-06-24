@@ -917,7 +917,6 @@ class TileSet(object):
                     self.regionset.tile_level_map[key].add(chunky//16)
                 else:
                     self.regionset.tile_level_map[key] = set([chunky//16])
-
                 if markall:
                     # markall mode: Skip all other checks, mark tiles
                     # as dirty unconditionally
@@ -1082,8 +1081,6 @@ class TileSet(object):
         """
 
         imgpath = tile.get_filepath(self.outputdir, self.imgextension)
-
-        dir = self.options.get("northdirection", 0)
 
         # Calculate which chunks are relevant to this tile
         # This is a list of (col, row, chunkx, chunkz, chunk_mtime)
@@ -1347,6 +1344,7 @@ class TileSet(object):
         else:
             get_mtime = regionset.get_chunk_mtime
 
+        #y_levels = [0,1,2,3,4,5,6,7,8]
         y_levels = sorted(regionset.tile_level_map[(tile.row, tile.col)])
         eveniters = []
         odditers = []
@@ -1745,9 +1743,6 @@ class RenderTile(object):
     def __setstate__(self, state):
         self.__init__(*state)
 
-    def add_y_level(self, y):
-        if y not in self.y_levels:
-            self.y_levels.append(y_level)
 
     def get_filepath(self, tiledir, imgformat):
         """Returns the path to this file given the directory to the tiles
