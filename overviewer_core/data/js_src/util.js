@@ -213,7 +213,7 @@ overviewer.util = {
         overviewer.map = L.map('mcmap', {crs: L.CRS.Simple});
 
         overviewer.map.attributionControl.setPrefix(
-            '<a href="https://overviewer.org">Overviewer/Leaflet</a>');
+            '<a href="https://github.com/tossowski/CubicChunksMapViewer">Cubic Chunks Overviewer</a>');
 
         overviewer.map.on('baselayerchange', function(ev) {
             

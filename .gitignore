@@ -2,12 +2,14 @@
 MANIFEST
 build/
 dist/
+outputs/
 docs/_build/
 Minecraft_Overviewer.egg-info
 terrain.png
 cachedir*
 
 config
+config.py
 
 #MCPatcher HD texture files
 custom_*.png

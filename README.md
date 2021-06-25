@@ -17,14 +17,14 @@ Blog:
 
 Some example renders:
 
+![RegionFile](./pictures/hong_kong.png)
+Huge thanks to the Hong Kong Build the Earth team for providng a sample of their build! Visit their website here: https://www.btehkmu.com/
+
 ![RegionFile](./pictures/everest.png)
 Mount Everest
 
 ![RegionFile](./pictures/halfdome.png)
 Half Dome, California
-
-![RegionFile](./pictures/grand_canyon.png)
-Grand Canyon, Arizona
 
 You can find how the overviewer works at a high level by reading the documentation found above. I am putting the format of cubic chunks here (to the best of my knowledge) to hopefully save people some time, since I couldn't find any documentation on it online.
 
