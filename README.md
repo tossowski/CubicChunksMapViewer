@@ -18,7 +18,7 @@ Blog:
 Some example renders:
 
 ![RegionFile](./pictures/hong_kong.png)
-Huge thanks to the Hong Kong Build the Earth team for providng a sample of their build! Visit their website here: https://www.btehkmu.com/
+Huge thanks to the Hong Kong Build the Earth team for providing a sample of their build! Visit their website here: https://www.btehkmu.com/
 
 ![RegionFile](./pictures/everest.png)
 Mount Everest
