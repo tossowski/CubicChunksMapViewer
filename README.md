@@ -55,7 +55,7 @@ The critical difference is that **cubic chunk data only stores data for 1 sectio
 
 ### How to use:
 * Clone the repository, or download the repository and extract its contents to a new folder.
-* Follow the instructions from [the overviewer](http://docs.overviewer.org/en/latest/building/) to build from source for your operating system. You probably don't need to copy the `Imaging.h`, `ImagingUtils.h`, and `ImPlatform.h` files, since they are in this repository. 
+* Follow the instructions from [the overviewer](http://docs.overviewer.org/en/latest/building/) to build from source for your operating system. Do not download their most recent source code though, instead use the contents from this repository. 
 * Create a config file named `config` in the same folder that has `overviewer.py`. An example config file is shown below:
 
 ```
