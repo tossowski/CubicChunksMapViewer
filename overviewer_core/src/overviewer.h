@@ -167,7 +167,7 @@ static inline uint32_t get_data(RenderState* state, DataType type, int32_t x, in
     PyArrayObject* data_array = NULL;
     uint32_t def = 0;
     if (type == SKYLIGHT)
-        def = 0;
+        def = 15;
 
     if (x >= 16) {
         x -= 16;

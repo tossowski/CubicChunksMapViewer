@@ -1,13 +1,12 @@
 #worlds["My world"] = "/mnt/c/Users/tosso/AppData/Roaming/.minecraft/saves/Vanilla1_12"
-worlds["My world"] = "/mnt/c/Users/tosso/Desktop/AT/instances/MysticsCubicChunksModpack/saves/OhHiMark"
-#worlds["My world"] = "/mnt/c/Users/tosso/AppData/Roaming/.minecraft/saves/EverestCopy"
+#worlds["My world"] = "/mnt/c/Users/tosso/Desktop/AT/instances/MysticsCubicChunksModpack/saves/OhHiMark"
+worlds["My world"] = "/mnt/c/Users/tosso/AppData/Roaming/.minecraft/saves/EverestCopy"
 
 renders["normalrender"] = {
     "world": "My world",
     "title": "Mount Everest",
-    "northdirection": "upper-left",
-    #"BTEcrop": (5385271,-11870951,5385471,-11870751),
-    "BTEcrop": (400,-200,700,-100),
+    "northdirection": "upper-right",
+    "BTEcrop": (5711300,-12494310, 5711400, -12494110),
     "rendermode":smooth_lighting
 }
 
