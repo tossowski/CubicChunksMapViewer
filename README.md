@@ -1,9 +1,3 @@
-### Bug fixing TODOs:
-* Random patches of non-smooth light areas when using smooth lighting
-* --check-tiles mode doesn't work, must use --force-render to render entire desired section
-* Make cropping easier for rendering sections millions of blocks away from origin
-
-
 ### Minecraft (Cubic Chunks) Overviewer 
 
 Disclaimer: This program was inspired by Andrew Brown and contributors (see CONTRIBUTORS.rst). All the links to their original minecraft overviewer program can be found below. All I did was modify it to make it compatible with the cubic chunks format to make it possible to render arbitrarily tall worlds.
@@ -57,3 +51,33 @@ To get the overviewer to read cubic chunks, we need to understand the difference
 ![CubicvsVanilla](./pictures/VanillavsCubic.svg)
 
 The critical difference is that **cubic chunk data only stores data for 1 section**. Since there is only 1 section, its y-coordinate is stored as a separate field. Vanilla chunks instead store chunk data for up to 16 chunk sections in its section tag. Each section within the section tag also has its y-coordinate encoded in it, instead of having it on the outside like the cubic chunks format.
+
+
+### How to use:
+* Clone the repository, or download the repository and extract its contents to a new folder.
+* Follow the instructions from [the overviewer](http://docs.overviewer.org/en/latest/building/) to build from source for your operating system. You probably don't need to copy the `Imaging.h`, `ImagingUtils.h`, and `ImPlatform.h` files, since they are in this repository. 
+* Create a config file named `config` in the same folder that has `overviewer.py`. An example config file is shown below:
+
+```
+worlds["My world"] = "<Put path to world folder here>"
+
+renders["normalrender"] = {
+    "world": "My world",
+    "title": "Half Dome Section",
+    "northdirection": "upper-right",
+    
+    # Remove the hashtag on line below if you want to render a section of your world. Format is (xmin, zmin, xmax, zmax)
+    #"BTEcrop": (5711300,-12494310, 5711400, -12494110),
+    "rendermode":smooth_lighting
+}
+
+outputdir = "./outputs"
+```
+* Navigate to the folder containing `overviewer.py`, and run
+```
+python overviewer.py --config=config --forcerender
+```
+
+### Bug fixing TODOs:
+* Random patches of non-smooth light areas when using smooth lighting
+* --check-tiles mode doesn't work, must use --force-render to render entire desired section

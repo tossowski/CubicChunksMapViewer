@@ -7,6 +7,8 @@ Minecraft_Overviewer.egg-info
 terrain.png
 cachedir*
 
+config
+
 #MCPatcher HD texture files
 custom_*.png
 

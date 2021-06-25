@@ -275,10 +275,10 @@ class Textures(object):
             versiondir = os.path.join(os.environ['APPDATA'], ".minecraft", "versions")
         elif "HOME" in os.environ:
             # For linux:
-            #versiondir = os.path.join(os.environ['HOME'], ".minecraft", "versions")
+            versiondir = os.path.join(os.environ['HOME'], ".minecraft", "versions")
             
             # Put math manually here if it still doesn't work
-            versiondir = "/mnt/c/Users/tosso/AppData/Roaming/.minecraft/versions"
+            #versiondir = "/mnt/c/Users/tosso/AppData/Roaming/.minecraft/versions"
             
             if not os.path.exists(versiondir) and sys.platform.startswith("darwin"):
                 # For Mac:
