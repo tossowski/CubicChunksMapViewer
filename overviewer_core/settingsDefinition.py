@@ -84,7 +84,7 @@ def get_default_config():
                 "renderchecks": Setting(required=False, validator=validateInt, default=None),
                 "rerenderprob": Setting(required=True, validator=validateRerenderprob, default=0),
                 "crop": Setting(required=False, validator=validateCrop, default=None),
-                "BTEcrop": Setting(required=False, validator=validateBTECrop, default=None),
+                "cubicchunkscrop": Setting(required=False, validator=validateCubicChunksCrop, default=None),
                 "changelist": Setting(required=False, validator=validateStr, default=None),
                 "markers": Setting(required=False, validator=validateMarkers, default=[]),
                 "overlay": Setting(required=False, validator=validateOverlays, default=[]),

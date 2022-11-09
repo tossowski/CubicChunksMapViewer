@@ -1845,7 +1845,7 @@ class CroppedRegionSet(RegionSetWrapper):
         else:
             return None
 
-class BTECroppedRegionSet(CroppedRegionSet):
+class CubicChunksCroppedRegionSet(CroppedRegionSet):
     def __init__(self, rsetobj, xmin, zmin, xmax, zmax):
         region_xmin = xmin//256
         region_xmax = xmax//256
@@ -1864,7 +1864,7 @@ class BTECroppedRegionSet(CroppedRegionSet):
 
         obj._filter_regionfiles(region_xmin, region_zmin, region_xmax, region_zmax)
 
-        super(BTECroppedRegionSet, self).__init__(obj, xmin, zmin, xmax, zmax)
+        super(CubicChunksCroppedRegionSet, self).__init__(obj, xmin, zmin, xmax, zmax)
 
 class CachedRegionSet(RegionSetWrapper):
     """A regionset wrapper that implements caching of the results from

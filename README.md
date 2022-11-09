@@ -67,7 +67,7 @@ renders["normalrender"] = {
     "northdirection": "upper-right",
     
     # Remove the hashtag on line below if you want to render a section of your world. Format is (xmin, zmin, xmax, zmax)
-    #"BTEcrop": (5711300,-12494310, 5711400, -12494110),
+    "cubicchunkscrop": (5711300,-12494310, 5711400, -12494110),
     "rendermode":smooth_lighting
 }
 

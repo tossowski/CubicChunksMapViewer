@@ -538,9 +538,9 @@ def main():
             rsets = []
             for zone in render['crop']:
                 rsets.append(world.CroppedRegionSet(rset, *zone))
-        elif "BTEcrop" in render:
+        elif "CubicChunksCrop" in render:
             rsets = []
-            rsets.append(world.BTECroppedRegionSet(rset, *render['BTEcrop']))
+            rsets.append(world.CubicChunksCroppedRegionSet(rset, *render['CubicChunksCrop']))
         else:
             rsets = [rset]
 

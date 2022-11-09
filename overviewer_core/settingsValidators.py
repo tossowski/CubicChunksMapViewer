@@ -250,10 +250,10 @@ def validateOutputDir(d):
         raise ValidationException("You must specify a valid output directory.")
     return expand_path(d)
 
-def validateBTECrop(value):
+def validateCubicChunksCrop(value):
 
     if not isinstance(value, tuple) or len(value) != 4:
-        raise ValidationException("BTE crop must specify minregionx, minregionz, maxregionx, maxregionz in a tuple of length 4")
+        raise ValidationException("Cubic crop must specify minregionx, minregionz, maxregionx, maxregionz in a tuple of length 4")
             
     a, b, c, d = tuple(int(x) for x in value)
 
